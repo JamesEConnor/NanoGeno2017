@@ -80,8 +80,8 @@ def applyGrammar(sentence, tense):
 runAgain = "yes"
 while(runAgain.lower() == "yes"):
     numSentences = int(input("How many sentences would you like to generate? "))
-
-    for x in range (0, numSentences, 1):
+    x = 0
+    while (x <= numSentences):
         #Get a random word from each part of speech
         randAdvb = randint(0,5999)
         sentenceAdverb = adverbLines[randAdvb]
@@ -102,7 +102,10 @@ while(runAgain.lower() == "yes"):
 
         
         #Join the list back together to print the sentence as a single string
-        print(subject, " ".join(sentenceList) + ".")
+        if(sentenceAdverb.endswith("ly")):
+            print(subject, " ".join(sentenceList) + ".")
+            #Only incerment x if the sentence is valid
+            x+=1
     runAgain = str(input("Generate more? "))
     while (runAgain.lower() != "yes" and runAgain.lower() != "no"):
          runAgain = str(input("Generate more? "))
