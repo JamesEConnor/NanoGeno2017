@@ -1,33 +1,40 @@
 from random import *
 
-#read all the text files into lists, allowing us to pick a word at random
-adverbs = open("adverbs.txt")
-adverbLines = adverbs.readlines()
 
-for x in range(0,6000,1):
-    adverbLines[x] = adverbLines[x].strip()
+def getWord(partOfSpeech):
+    #Figure out which list we are using, from the part of speech
+    if(partOfSpeech == "adverb"):
+        wordFile = "adverbs.txt"
+        
+    elif(partOfSpeech == "verb"):
+        wordFile = "verbs.txt"
+        
+    elif(partOfSpeech == "adjective"):
+        wordFile = "adjectives.txt"
+        
+    else:
+        wordFile = "nouns.txt"
 
-    
-verbs = open("verbs.txt")
-verbLines = verbs.readlines()
+    #open the text file, and make each word an element of a list
+    words = open(wordFile)
+    wordLines = words.readlines()
 
-for y in range (0,30000,1):
-    verbLines[y] = verbLines[y].strip()
+    #Find number of words in list
+    listMax = len(wordLines)
 
-adjectives = open("adjectives.txt")
-adjLines = adjectives.readlines()
-
-for z in range (0,28000,1):
-    adjLines[z] = adjLines[z].strip()
-    
-nouns = open("nouns.txt")
-nounLines = nouns.readlines()
-
-for a in range (0,90000,1):
-    nounLines[a] = nounLines[a].strip()
+    #Strip all special characters from each word
+    for x in range(0,listMax,1):
+        wordLines[x] = wordLines[x].strip()
+        
+    #get a random word
+    randWord = randint(0,listMax)
+    sentenceWord = wordLines[randWord]
+    return sentenceWord
 
 
-#From the ending of the verb, find te tense
+
+#=========GRAMMAR ENGINE==================================================================================================================================================================================
+#From the ending of the verb, find the tense
 def getTense(SentenceVerb):
     if(sentenceVerb.endswith('ed')):
         tense = -1
@@ -47,6 +54,7 @@ def getPlural(sentenceNoun):
 
 #from the ending of the verb and the tense, determine the subject of the sentence
 def getSubject(sentenceVerb, tense):
+    #If the verb does end with s, the subject can be he, she, or it, doesn't matter which, so we pick randomly
     if (sentenceVerb.endswith("s") and tense == 0):
         subjectNum = randint(0,2)
         if(subjectNum == 0):
@@ -57,6 +65,7 @@ def getSubject(sentenceVerb, tense):
             subject = "It"
             
     else:
+        #If the verb doesnt end with s, the subject can be I, you, we or they, doesn't matter which, so we pick randomly
         subjectNum = randint(0,3)
         if(subjectNum == 0):
             subject = "I"
@@ -77,23 +86,25 @@ def applyGrammar(sentence, tense):
         sentenceList.insert(0,"will be")
         sentenceList.insert(3, "the")
     return sentenceList
+
+
+
+
+
 runAgain = "yes"
 while(runAgain.lower() == "yes"):
     numSentences = int(input("How many sentences would you like to generate? "))
-    x = 0
-    while (x <= numSentences):
+    i = 1
+    while (i <= numSentences):
         #Get a random word from each part of speech
-        randAdvb = randint(0,5999)
-        sentenceAdverb = adverbLines[randAdvb]
-        randVerb = randint(0,30000)
-        sentenceVerb = verbLines[randVerb]
-        randAdj = randint(0,27000)
-        sentenceAdj = adjLines[randAdj]
-        randNoun = randint(0,90000)
-        sentenceNoun = nounLines[randNoun]
+        sentenceAdverb = getWord("adverb")
+        sentenceVerb = getWord("verb")
+        sentenceAdj = getWord("adjective")
+        sentenceNoun = getWord("noun")
 
         #Create the beginning of the sentence, using each part of speech
         sentence = sentenceAdverb + " " + sentenceVerb + " " + sentenceAdj + " " + sentenceNoun
+
         #Get the tense, number and subject of the sentence, and use those values to build the sentence
         tense = getTense(sentenceVerb)
         plural = getPlural(sentenceNoun)
@@ -103,15 +114,10 @@ while(runAgain.lower() == "yes"):
         
         #Join the list back together to print the sentence as a single string
         if(sentenceAdverb.endswith("ly")):
-            print(subject, " ".join(sentenceList) + ".")
+            print(subject, " ".join(sentenceList) + ".\n")
             #Only incerment x if the sentence is valid
-            x+=1
+            i += 1
+
     runAgain = str(input("Generate more? "))
     while (runAgain.lower() != "yes" and runAgain.lower() != "no"):
          runAgain = str(input("Generate more? "))
-
-    
-
-
-    
-    
