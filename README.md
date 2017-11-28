@@ -1,6 +1,6 @@
 # NanoGeno2017
 
-Alex Kantor and James Connor's 2-week attempt at a NaNo GeMo AI. It's a work in progress...
+Alex Kantor and James Connor's 2-week attempt at a NaNoGenMo AI. It's a work in progress...
 
 Just tell the generator how many sentences you want, and that many completely random sentences will be created.
 
